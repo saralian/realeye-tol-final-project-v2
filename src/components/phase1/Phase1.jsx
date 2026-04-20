@@ -33,7 +33,13 @@ export default function Phase1({ phase1Data, onComplete }) {
   return (
     <div className="max-w-4xl mx-auto px-6 py-12">
 
-      {step === "pair" && (
+      {step === "acknowledgment" ? (
+        <Acknowledgment
+          selectedOptions={selectedTellOptions}
+          acknowledgments={phase1Data.acknowledgments}
+          onContinue={handleAcknowledgmentContinue}
+        />
+      ) : (
         <div className="space-y-8">
           <div>
             <p className="text-sm text-gray-500">{phase1Data.instruction}</p>
@@ -44,35 +50,27 @@ export default function Phase1({ phase1Data, onComplete }) {
             imageA={phase1Data.imageA}
             imageB={phase1Data.imageB}
             onConfirm={handleConfirm}
+            locked={step === "post-confirm"}
           />
-        </div>
-      )}
-
-      {step === "post-confirm" && (
-        <div className="space-y-10">
-          <PhotoFeedback
-            isCorrect={pickedCorrectly}
-            correctFeedback={phase1Data.correctPhotoFeedback}
-            wrongFeedback={phase1Data.wrongPhotoFeedback}
-            onContinueWrong={handleWrongContinue}
-          />
-          {pickedCorrectly && (
-            <TellSelection
-              tellOptions={phase1Data.tellOptions}
-              tellSelectionPrompt={phase1Data.tellSelectionPrompt}
-              continueButtonText={phase1Data.continueButtonText}
-              onContinue={handleTellContinue}
-            />
+          {step === "post-confirm" && (
+            <div className="space-y-10 pt-4 border-t border-gray-200">
+              <PhotoFeedback
+                isCorrect={pickedCorrectly}
+                correctFeedback={phase1Data.correctPhotoFeedback}
+                wrongFeedback={phase1Data.wrongPhotoFeedback}
+                onContinueWrong={handleWrongContinue}
+              />
+              {pickedCorrectly && (
+                <TellSelection
+                  tellOptions={phase1Data.tellOptions}
+                  tellSelectionPrompt={phase1Data.tellSelectionPrompt}
+                  continueButtonText={phase1Data.continueButtonText}
+                  onContinue={handleTellContinue}
+                />
+              )}
+            </div>
           )}
         </div>
-      )}
-
-      {step === "acknowledgment" && (
-        <Acknowledgment
-          selectedOptions={selectedTellOptions}
-          acknowledgments={phase1Data.acknowledgments}
-          onContinue={handleAcknowledgmentContinue}
-        />
       )}
 
     </div>

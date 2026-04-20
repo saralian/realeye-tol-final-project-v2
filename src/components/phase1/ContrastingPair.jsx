@@ -1,7 +1,7 @@
 import { useState } from "react"
 import Button from "../common/Button"
 
-export default function ContrastingPair({ imageA, imageB, onConfirm }) {
+export default function ContrastingPair({ imageA, imageB, onConfirm, locked = false }) {
   const [selected, setSelected] = useState(null) // "A" | "B"
 
   const images = [
@@ -25,11 +25,14 @@ export default function ContrastingPair({ imageA, imageB, onConfirm }) {
               <p className="text-sm font-semibold text-gray-500 mb-2 tracking-wide">Photo {key}</p>
               <button
                 type="button"
-                onClick={() => setSelected(key)}
+                onClick={locked ? undefined : () => setSelected(key)}
+                disabled={locked}
                 className={`w-full block rounded-lg overflow-hidden transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400
                   ${isSelected
                     ? "ring-4 ring-blue-500 ring-offset-2 shadow-lg"
-                    : "ring-1 ring-gray-200 hover:ring-2 hover:ring-blue-300 hover:shadow-md"
+                    : locked
+                      ? "ring-1 ring-gray-200"
+                      : "ring-1 ring-gray-200 hover:ring-2 hover:ring-blue-300 hover:shadow-md"
                   }`}
               >
                 <div className="h-80">
@@ -45,11 +48,13 @@ export default function ContrastingPair({ imageA, imageB, onConfirm }) {
         })}
       </div>
 
-      <div className="mt-8 flex justify-center">
-        <Button variant="primary" onClick={handleConfirm} disabled={!selected}>
-          Confirm my choice
-        </Button>
-      </div>
+      {!locked && (
+        <div className="mt-8 flex justify-center">
+          <Button variant="primary" onClick={handleConfirm} disabled={!selected}>
+            Confirm my choice
+          </Button>
+        </div>
+      )}
     </div>
   )
 }
