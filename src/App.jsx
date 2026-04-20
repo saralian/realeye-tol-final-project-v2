@@ -3,9 +3,11 @@ import Header from "./components/common/Header"
 import Phase1 from "./components/phase1/Phase1"
 import Phase2 from "./components/phase2/Phase2"
 import Button from "./components/common/Button"
-import { rounds } from "./data/exercises"
+import { rounds, tellLibrary } from "./data/exercises"
 
-const { phase1: phase1Data, phase2: phase2Data } = rounds[0]
+const round = rounds[0]
+const { phase1: phase1Data, phase2: phase2Data } = round
+const tellData = tellLibrary.find(t => t.id === round.tellId)
 
 export default function App() {
   const [phase, setPhase] = useState("phase1")
@@ -38,6 +40,7 @@ export default function App() {
       {phase === "phase2" && (
         <Phase2
           phase2Data={phase2Data}
+          tellData={tellData}
           onComplete={() => alert("Phase 2 complete — Phase 3 coming in Session 5")}
         />
       )}

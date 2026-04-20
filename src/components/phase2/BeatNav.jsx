@@ -1,6 +1,6 @@
 import Button from "../common/Button"
 
-export default function BeatNav({ currentBeat, totalBeats, onBack, onNext, nextLabel = "Next →" }) {
+export default function BeatNav({ currentBeat, totalBeats, onBack, onNext, nextLabel = "Next →", hideNext = false }) {
   return (
     <div className="flex items-center justify-between mt-12 pt-8 border-t border-gray-200">
       <div className="w-32">
@@ -21,7 +21,7 @@ export default function BeatNav({ currentBeat, totalBeats, onBack, onNext, nextL
       </div>
 
       <div className="w-32 flex justify-end">
-        <Button variant="primary" onClick={onNext}>{nextLabel}</Button>
+        {!hideNext && <Button variant="primary" onClick={onNext}>{nextLabel}</Button>}
       </div>
     </div>
   )

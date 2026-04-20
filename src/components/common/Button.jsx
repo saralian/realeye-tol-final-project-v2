@@ -1,4 +1,4 @@
-export default function Button({ children, onClick, disabled = false, variant = "primary", type = "button" }) {
+export default function Button({ children, onClick, disabled = false, variant = "primary", type = "button", className = "" }) {
   const base = "px-5 py-2.5 rounded-md font-medium text-base transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
 
   const variants = {
@@ -14,7 +14,7 @@ export default function Button({ children, onClick, disabled = false, variant = 
       type={type}
       onClick={onClick}
       disabled={disabled}
-      className={`${base} ${variants[variant] ?? variants.primary} ${disabled ? disabledStyles : ""}`}
+      className={`${base} ${variants[variant] ?? variants.primary} ${disabled ? disabledStyles : ""} ${className}`}
     >
       {children}
     </button>
