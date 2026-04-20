@@ -210,6 +210,7 @@ public/
     round1/
       phase1-a.jpg        # Real classroom photo
       phase1-b.jpg        # AI classroom photo (missing arm)
+      phase1-b-zoom.jpg   # Zoomed in version on tell
       worked-example-1.jpg
       worked-example-2.jpg
       practice-1.jpg      # Marine (single-tell)

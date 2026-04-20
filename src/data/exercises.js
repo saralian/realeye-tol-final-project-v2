@@ -119,31 +119,23 @@ export const rounds = [
         introText: "Here's what you might have noticed in this image:",
 
         // Highlight rectangle on the full image — draws eye to the region
-        // TODO: adjust coordinates once image is placed; these are estimates
-        // Region should cover the girl in blue's torso/shoulder/arm-stump area
         highlightRegion: {
-          x: 42, // left edge as % of image width
-          y: 35, // top edge as % of image height
-          width: 18, // width as % of image width
-          height: 35, // height as % of image height
+          x: 58,
+          y: 37,
+          width: 14,
+          height: 30,
         },
 
-        // Zoom-in crop shown in the right panel
-        // TODO: adjust coordinates once image is placed
-        zoomCrop: {
-          x: 40,
-          y: 32,
-          width: 22,
-          height: 42,
-        },
+        // Manually cropped image - just  file path now, no coordinate math
+        zoomSrc: `${BASE}images/round1/phase1-b-zoom.jpg`,
 
         // Optional arrow annotation on the zoom-in
         // Set to null to omit
         zoomAnnotation: {
           text: "arm ends here",
           // Position within the zoom crop, as percentages of the crop
-          arrowX: 50,
-          arrowY: 60,
+          arrowX: 55,
+          arrowY: 66,
         },
 
         directionalHeading: "Look at the girl in the blue shirt.",
