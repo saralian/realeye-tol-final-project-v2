@@ -33,7 +33,7 @@ function ZoomCrop({ zoomSrc, annotation }) {
   )
 }
 
-export default function Beat2({ beat2Data, onNext, onBack }) {
+export default function Beat2({ beat2Data, onNext, onBack, totalBeats = 4 }) {
   const [annotationRevealed, setAnnotationRevealed] = useState(false)
 
   const annotationParagraphs = beat2Data.annotationText.split("\n\n")
@@ -94,7 +94,7 @@ export default function Beat2({ beat2Data, onNext, onBack }) {
         )}
       </div>
 
-      <BeatNav currentBeat={2} totalBeats={4} onNext={onNext} onBack={onBack} />
+      <BeatNav currentBeat={2} totalBeats={totalBeats} onNext={onNext} onBack={onBack} />
     </div>
   )
 }

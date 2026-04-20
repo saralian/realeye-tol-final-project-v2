@@ -1,6 +1,6 @@
 import BeatNav from "./BeatNav"
 
-export default function Beat3({ beat3Data, onNext, onBack }) {
+export default function Beat3({ beat3Data, onNext, onBack, totalBeats = 4 }) {
   return (
     <div>
       <p className="text-base text-gray-600 mb-8">{beat3Data.introText}</p>
@@ -24,7 +24,7 @@ export default function Beat3({ beat3Data, onNext, onBack }) {
         ))}
       </div>
 
-      <BeatNav currentBeat={3} totalBeats={4} onNext={onNext} onBack={onBack} />
+      <BeatNav currentBeat={3} totalBeats={totalBeats} onNext={onNext} onBack={onBack} />
     </div>
   )
 }

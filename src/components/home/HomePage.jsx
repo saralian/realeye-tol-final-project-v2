@@ -2,7 +2,7 @@ import { appCopy, tellLibrary } from "../../data/exercises"
 import Button from "../common/Button"
 import LibraryGrid from "./LibraryGrid"
 
-export default function HomePage({ onStart, onTellClick, onRoundClick, unlockedTells = [], roundProgress = {} }) {
+export default function HomePage({ onStart, onTellClick, onRoundClick, unlockedTells = [], roundProgress = {}, onReset }) {
   const { home } = appCopy
   const earnedCount = unlockedTells.length
   const totalCount = tellLibrary.length
@@ -62,6 +62,17 @@ export default function HomePage({ onStart, onTellClick, onRoundClick, unlockedT
           />
         </div>
       </div>
+
+      {onReset && (
+        <div className="mt-16 pt-8 border-t border-gray-100 text-center">
+          <button
+            onClick={onReset}
+            className="text-xs text-gray-400 hover:text-gray-600 transition-colors underline underline-offset-2"
+          >
+            Reset demo
+          </button>
+        </div>
+      )}
 
     </main>
   )

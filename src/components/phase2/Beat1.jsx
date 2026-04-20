@@ -1,6 +1,6 @@
 import BeatNav from "./BeatNav"
 
-export default function Beat1({ beat1Data, onNext }) {
+export default function Beat1({ beat1Data, onNext, totalBeats = 4 }) {
   return (
     <div>
       <div className="space-y-6">
@@ -19,7 +19,7 @@ export default function Beat1({ beat1Data, onNext }) {
         </div>
       </div>
 
-      <BeatNav currentBeat={1} totalBeats={4} onNext={onNext} />
+      <BeatNav currentBeat={1} totalBeats={totalBeats} onNext={onNext} />
     </div>
   )
 }

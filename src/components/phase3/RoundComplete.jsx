@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react"
+import { Link } from "react-router-dom"
 import Button from "../common/Button"
 import { appCopy } from "../../data/exercises"
 
@@ -48,7 +49,12 @@ export default function RoundComplete({ tellData, onHome }) {
             {tellData.shortTagline}
           </p>
           {earned && (
-            <p className="text-sm font-medium text-emerald-700 mt-4">{appCopy.tellCard.viewDetailsText}</p>
+            <Link
+              to={`/tell/${tellData.id}`}
+              className="block text-sm font-medium text-emerald-700 mt-4 hover:text-emerald-800 transition-colors"
+            >
+              {appCopy.tellCard.viewDetailsText}
+            </Link>
           )}
         </div>
       </div>

@@ -2,15 +2,18 @@ import { useState } from "react"
 import PracticeImage from "./PracticeImage"
 import RoundComplete from "./RoundComplete"
 
-export default function Phase3({ phase3Data, tellData, onHome, debug = false }) {
-  const [currentIndex, setCurrentIndex] = useState(0)
+export default function Phase3({ phase3Data, tellData, onHome, debug = false, initialImageIndex = 0, onImageComplete, onRoundComplete }) {
+  const [currentIndex, setCurrentIndex] = useState(initialImageIndex)
   const [done, setDone] = useState(false)
 
   function handleComplete() {
     if (currentIndex < phase3Data.images.length - 1) {
-      setCurrentIndex(i => i + 1)
+      const nextIndex = currentIndex + 1
+      setCurrentIndex(nextIndex)
+      onImageComplete?.(currentIndex + 1, phase3Data.images[nextIndex].id)
     } else {
       setDone(true)
+      onRoundComplete?.()
     }
   }
 

@@ -173,7 +173,7 @@ export const rounds = [
       // --------------------------------------------------------------------
       beat4: {
         bridgeHeading: "Now you know what to look for.",
-        bridgeText: "Let's practice spotting this tell in a few more images.",
+        bridgeText: "Let's practice spotting this tell in a few more images to unlock this card.",
         buttonText: "Start practicing",
       },
     },
