@@ -1,14 +1,6 @@
 import Button from "../common/Button"
 import BeatNav from "./BeatNav"
 
-function LockIcon() {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-      <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
-    </svg>
-  )
-}
-
 export default function Beat4({ beat4Data, onComplete, onBack, tellData }) {
   return (
     <div>
@@ -18,17 +10,15 @@ export default function Beat4({ beat4Data, onComplete, onBack, tellData }) {
       </div>
 
       {tellData && (
-        <div className="flex items-start gap-4 p-5 rounded-xl border border-gray-200 bg-gray-50 max-w-md">
-          <span className="text-3xl grayscale opacity-60" role="img" aria-label={tellData.name}>
-            {tellData.icon}
-          </span>
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 mb-1">
-              <LockIcon />
-              <span className="font-semibold text-gray-500">{tellData.name}</span>
+        <div className="max-w-md rounded-xl overflow-hidden shadow-sm">
+          <div className="flex">
+            <div className="w-1.5 bg-blue-500 shrink-0" />
+            <div className="flex-1 bg-gray-100 border-t border-r border-b border-gray-200 rounded-r-xl p-5">
+              <span className="text-3xl block mb-2" role="img" aria-label={tellData.name}>{tellData.icon}</span>
+              <p className="font-bold text-gray-600 text-lg mb-1">{tellData.name}</p>
+              <p className="text-sm text-gray-600 mb-2">{tellData.shortTagline}</p>
+              <p className="text-xs text-blue-500 font-medium">Up next: Practice</p>
             </div>
-            <p className="text-sm text-gray-500 mb-2">{tellData.shortTagline}</p>
-            <p className="text-xs text-gray-400 italic">You'll earn this when you complete Practice.</p>
           </div>
         </div>
       )}

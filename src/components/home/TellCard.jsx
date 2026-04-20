@@ -55,9 +55,9 @@ export default function TellCard({ tell, state, progress, onClick }) {
       >
         <div className="flex h-full">
           <div className="w-1.5 bg-blue-500 shrink-0" />
-          <div className="flex-1 bg-white border-t border-r border-b border-gray-200 rounded-r-xl p-6">
+          <div className="flex-1 bg-gray-100 border-t border-r border-b border-gray-200 rounded-r-xl p-6">
             <span className="text-3xl block mb-3" role="img" aria-label={tell.name}>{tell.icon}</span>
-            <h3 className="font-bold text-gray-900 text-lg mb-1">{tell.name}</h3>
+            <h3 className="font-bold text-gray-600 text-lg mb-1">{tell.name}</h3>
             <p className="text-sm text-blue-600 mb-4">{getProgressLabel(progress)}</p>
             <span className="text-sm font-medium text-blue-500">{appCopy.tellCard.continueText}</span>
           </div>
@@ -68,18 +68,16 @@ export default function TellCard({ tell, state, progress, onClick }) {
 
   if (state === "coming-soon") {
     return (
-      <div className="bg-white border border-gray-200 rounded-xl shadow-sm p-6">
-        <div className="grayscale opacity-60">
-          <div className="flex items-start justify-between mb-3">
-            <span className="text-3xl" role="img" aria-label={tell.name}>{tell.icon}</span>
-            <span className="flex items-center gap-1 text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
-              <LockIcon />
-              {appCopy.tellCard.lockedText}
-            </span>
-          </div>
-          <h3 className="font-bold text-gray-900 text-lg mb-1">{tell.name}</h3>
-          <p className="text-sm text-gray-600">{tell.shortTagline}</p>
+      <div className="bg-gray-100 border border-gray-200 rounded-xl shadow-sm p-6">
+        <div className="flex items-start justify-between mb-3">
+          <span className="text-3xl grayscale" role="img" aria-label={tell.name}>{tell.icon}</span>
+          <span className="flex items-center gap-1 text-xs font-medium text-gray-400 bg-gray-200 px-2 py-1 rounded-full">
+            <LockIcon />
+            {appCopy.tellCard.lockedText}
+          </span>
         </div>
+        <h3 className="font-bold text-gray-400 text-lg mb-1">{tell.name}</h3>
+        <p className="text-sm text-gray-400">{tell.shortTagline}</p>
       </div>
     )
   }

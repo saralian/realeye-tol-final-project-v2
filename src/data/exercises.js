@@ -184,63 +184,53 @@ export const rounds = [
     phase3: {
       // Shown above each practice image
       instruction:
-        "Find the hands-and-fingers problems in this image. Click on each spot where you see the tell.",
+        "Find the hands-and-fingers problems in this image. Click where you see the tell.",
 
-      // Modal shown when learner clicks "Reveal"
-      revealConfirmModal: {
-        heading: "Show where the tells are?",
-        body: "You'll still complete this image, but you won't need to find the tells on your own.",
-        cancelText: "Cancel",
-        confirmText: "Yes, reveal",
-      },
-
-      // Modal shown if learner clicks Submit with zero markers placed
-      emptySubmitModal: {
-        heading: "You haven't marked any spots yet.",
-        body: "Are you sure you want to submit?",
-        cancelText: "Go back",
-        confirmText: "Submit anyway",
-      },
+      // Shown briefly when a wrong click is placed (fades out after ~2s)
+      wrongClickText: "Not quite — keep looking.",
 
       // Hint tooltip shown when hint button is clicked
       hintTooltip: "Look more closely in this area.",
 
-      // Results copy — shown on reveal screen after submit
-      // The component picks the variant based on learner performance:
-      //   - If reveal was used → `revealUsed`
-      //   - Else if all hotspots found → `allFound`
-      //   - Else if some found (1+) → `someFound`
-      //   - Else → `noneFound`
-      resultsCopy: {
-        allFound: "Nice work — you spotted all of them.",
-        someFound:
-          "Good catch on the ones you spotted. There were a few more — take a look at where they were.",
-        noneFound:
-          "These ones can be tricky. Take a look at where the tells were — the more examples you see, the easier they get to spot.",
-        revealUsed:
-          "No problem — these take practice to see. Now you know where they were. Keep at it.",
+      // Modal shown when learner clicks "Reveal"
+      revealConfirmModal: {
+        heading: "Show where the tell is?",
+        body: "The tell location will be revealed. You'll still move on to the next image.",
+        cancelText: "Keep trying",
+        confirmText: "Yes, show me",
       },
 
-      continueButtonText: "Continue",
+      // Button text for the last image — triggers RoundComplete
+      completeButtonText: "Complete Round",
 
       // --------------------------------------------------------------------
       // Practice images (3 total for demo)
+      // Each image: learner clicks to find the primary tell (find-until-solved).
+      // Wrong clicks get immediate gray marker + wrongClickText feedback.
+      // Correct click triggers successMessage + bonusTells reveal (if any).
+      // Reveal button shows primaryTell location if learner gives up.
+      // After success or reveal, Continue button advances to next image.
+      // After final image, Complete Round triggers Tell Library unlock.
       // --------------------------------------------------------------------
       images: [
         {
           id: "practice-1",
           src: `${BASE}images/round1/practice-1.jpg`,
 
-          // Single-tell image for confidence-building
-          hotspots: [
+          // The tell the learner must find. Success triggered on correct click.
+          primaryTells: [
             {
               id: "h1",
-              // TODO: set coordinates once image is placed
-              x: 50, // center x as %
-              y: 50, // center y as %
-              width: 15, // hitbox width as %
-              height: 20, // hitbox height as %
-              revealAnnotation: 
+              x: 66,       // TODO: set coordinates once image is placed
+              y: 70,
+              width: 10,
+              height: 11,
+              // Shown immediately on correct click
+              successMessage:
+                "Nice find! Look at the hand gripping the suitcase — only three knuckles " +
+                "are visible where there should be four across the back of the hand.",
+              // Shown if learner clicks Reveal instead of finding it themselves
+              revealAnnotation:
                 "Look at the hand gripping the suitcase — only three knuckles are visible, " +
                 "where there should be four across the back of the hand. AI often skips " +
                 "anatomical details that would be obvious to anyone who's looked at their " +
@@ -248,12 +238,14 @@ export const rounds = [
             },
           ],
 
-          // Hint region — larger area that gets highlighted when hint is used
+          revealIntroText: null,
+
+          // Hint region highlighted when hint button is clicked
           // TODO: set coordinates once image is placed
           hintRegion: {
-            x: 45,
-            y: 45,
-            width: 25,
+            x: 55,
+            y: 60,
+            width: 30,
             height: 30,
           },
         },
@@ -261,29 +253,34 @@ export const rounds = [
           id: "practice-2",
           src: `${BASE}images/round1/practice-2.jpg`,
 
-          // Multi-tell image — demonstrates the "there's more than you think" lesson
-          hotspots: [
+          // Both locations are findable — clicking either one triggers success.
+          // The unfound one fades in as a bonus reveal afterward.
+          primaryTells: [
             {
-            // TODO: set coordinates
               id: "h1",
-              x: 25,
-              y: 40,
-              width: 12,
+              x: 20,
+              y: 52,
+              width: 11,
               height: 15,
-              revealAnnotation: 
+              successMessage:
+                "Nice find! Those fingers are unnaturally long and taper in a way " +
+                "real fingers don't — AI sometimes gets the count right but fails on proportion.",
+              revealAnnotation:
                 "Look at the right hand of the second woman from the right. Their fingers are " +
                 "unnaturally long — stretching nearly the full height of the candle — and " +
                 "taper in a way real fingers don't. AI sometimes gets the number of fingers " +
                 "right but fails on proportion.",
             },
             {
-            // TODO: set coordinates
               id: "h2",
-              x: 55,
-              y: 50,
-              width: 14,
-              height: 18,
-              revealAnnotation: 
+              x: 32,
+              y: 52,
+              width: 10,
+              height: 16,
+              successMessage:
+                "Nice find! Those fingers blur and merge into each other with no clear " +
+                "separation — AI struggles to keep adjacent fingers distinct.",
+              revealAnnotation:
                 "Look at the left hand of the third woman from the right. The fingers blur " +
                 "and merge into each other with no clear separation. This is AI struggling " +
                 "to keep adjacent fingers distinct — a common failure when hands are " +
@@ -291,43 +288,46 @@ export const rounds = [
             },
           ],
 
-          // Wider hint region since there are multiple tells
-          // TODO: set coordinates once image is placed
+          revealIntroText: "This image actually has one more hands-and-fingers tell. Can you see it now?",
+
           hintRegion: {
-            x: 20,
-            y: 35,
-            width: 65,
+            x: 15,
+            y: 45,
+            width: 40,
             height: 40,
           },
         },
-                {
+        {
           id: "practice-3",
           src: `${BASE}images/round1/practice-3.jpg`,
 
-          hotspots: [
+          primaryTells: [
             {
               id: "h1",
-              // TODO: set coordinates
-              x: 30,
-              y: 40,
+              x: 55,       // TODO: set coordinates
+              y: 55,
               width: 12,
-              height: 15,
-              revealAnnotation: 
+              height: 19,
+              successMessage:
+                "Nice find! That hand has a thumb and index finger but is missing the ring " +
+                "finger and pinky — AI can generate several correct hands in a scene and " +
+                "still fail on one.",
+              revealAnnotation:
                 "Look at the pointing hand on the right. It has a thumb, an index finger, " +
                 "and a middle finger — but no ring finger or pinky. The other hands in the " +
                 "image look fine, which makes this one easy to miss. AI can generate " +
                 "several correct hands in a scene and still fail on one — the failures " +
-                "aren't always consistent across an image."
+                "aren't always consistent across an image.",
             },
           ],
 
-          // Hint region — larger area that gets highlighted when hint is used
-          // TODO: set coordinates once image is placed
+          revealIntroText: null,
+
           hintRegion: {
-            x: 25,
-            y: 35,
-            width: 25,
-            height: 25,
+            x: 30,
+            y: 45,
+            width: 60,
+            height: 40,
           },
         },
       ],

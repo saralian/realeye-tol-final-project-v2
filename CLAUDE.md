@@ -114,10 +114,10 @@ Phase 2: Learn
   ├─ Beat 3: 2 worked example images with annotations
   ├─ Beat 4: Bridge ("Start practicing")
   ↓
-Phase 3: Practice
-  ├─ Image 1 (single-tell: Marine) → Submit → Results → Continue
-  ├─ Image 2 (multi-tell: candles) → Submit → Results → Continue
-  ├─ Image 3 (single-tell among distractors: dinner table) → Submit → Results → Continue
+Phase 3: Practice (find-until-solved, immediate per-click feedback)
+  ├─ Image 1: Click to find the tell → correct click triggers success + bonus reveal → Continue
+  ├─ Image 2: Click to find either tell → success on first correct click → remaining tell revealed → Continue
+  ├─ Image 3: Click to find the tell → correct click triggers success + bonus reveal → "Complete Round"
   ↓
 Round Complete
   ├─ Celebration heading
@@ -130,7 +130,7 @@ Round Complete
 
 - **Home icon** in the header: always visible during a round, saves progress silently, returns to home. No confirmation dialog.
 - **Back navigation** exists only between Phase 2 beats (previous beat / next beat).
-- **No back button** during Phase 3 submission flow or results — these disrupt the submit-reveal-continue cycle.
+- **No back button** during Phase 3 — these disrupt the find-success-continue flow.
 - **Mid-round exit** via home icon returns to home. The relevant Tell Library card shows in-progress state with a "Continue" option that resumes at the exact point the learner left.
 - **Browser back button** should behave reasonably but isn't a primary navigation path. Route changes should persist to localStorage so browser back doesn't lose progress.
 
@@ -193,13 +193,13 @@ src/
     round/                # Round-level components (RoundContainer, PhaseRouter)
     phase1/               # Phase 1 components (ContrastingPair, TellSelection, Acknowledgment)
     phase2/               # Phase 2 components (Beat1, Beat2, Beat3, Beat4, BeatNav)
-    phase3/               # Phase 3 components (PracticeImage, HotspotMarker, ResultsView)
+    phase3/               # Phase 3 components (PracticeImage, HotspotMarker, HintRegion, RoundComplete)
     tellDetail/           # Tell detail page components
   hooks/
     useLocalStorage.js    # Safe localStorage read/write
     useRoundProgress.js   # Progress tracking logic
   utils/
-    selectionLogic.js     # Phase 1 acknowledgment cascade, Phase 3 results variant logic
+    selectionLogic.js     # Phase 1 acknowledgment cascade
     hotspotDetection.js   # Percentage-based click hit detection
   App.jsx
   main.jsx
@@ -366,26 +366,31 @@ If the learner picks the real photo as AI:
 
 The wrong-photo learner does not get to answer "what made you pick that?" because the question no longer makes sense.
 
-### Phase 3 results variant selection
+### Phase 3 interaction model
 
-After the learner submits a practice image, pick **one** results message:
+Phase 3 uses a **find-until-solved** model with immediate per-click feedback. There is no Submit button.
 
-```
-If the reveal button was used:
-    → use resultsCopy.revealUsed
-Else if all hotspots were correctly marked:
-    → use resultsCopy.allFound
-Else if at least one hotspot was correctly marked:
-    → use resultsCopy.someFound
-Else (zero correct):
-    → use resultsCopy.noneFound
-```
+**Click behavior:**
+- **Correct click** (lands within any `primaryTells` hitbox): green check marker appears at click location, `successMessage` from that tell is shown, active find phase ends immediately
+- **Wrong click** (outside all hitboxes): gray persistent marker placed at click location, `wrongClickText` fades in for ~2s then disappears; the gray marker persists so the learner can track where they've already looked
 
-"Correctly marked" means a learner's click fell within the hotspot's rectangle.
+**Success → bonus reveal flow:**
+1. Brief pause after the success message
+2. If `revealIntroText` is non-null for this image, show it
+3. Any `primaryTells` entries NOT found fade in one at a time with their `revealAnnotation` text shown as a small label below the marker (always visible, not hover-only)
+4. Continue button appears to advance to next image
+
+**Reveal button** (available during active find phase only): clicking opens `revealConfirmModal`; on confirm, all `primaryTells` entries are shown with their `revealAnnotation` text and `revealIntroText` (if non-null), then Continue button appears.
+
+**Data shape:** Each image has a `primaryTells` array (one or two entries). The first correct click on any `primaryTells` hitbox triggers success. Any remaining unfound entries are shown in the bonus reveal. There is no `bonusTells` field.
+
+**No graded results screen.** The success moment + bonus reveal replaces a results screen entirely. No score shown, no copy variants for performance.
+
+**Button text:** "Continue" after images 1 and 2; "Complete Round" (`completeButtonText`) after image 3.
 
 ### Phase 3 library unlock trigger
 
-The Tell Library card for the round unlocks **after the learner completes the 3rd practice image**, regardless of their performance on the individual images. Completion means they submitted (with or without clicks) and viewed the results screen.
+The Tell Library card for the round unlocks **after the learner completes all 3 practice images**, regardless of performance or whether Reveal was used on any image. Completion means reaching the Continue / Complete Round button on each image.
 
 ### Tell Library card state selection
 
@@ -461,7 +466,7 @@ Use Tailwind's default type scale where possible; avoid custom pixel values.
 - **Secondary buttons** (Back, Cancel): outlined or subtle background, blue text
 - **Disabled buttons**: 50% opacity, not-allowed cursor, no hover effects
 - **Destructive / reveal** (use sparingly): amber or outlined style, never red
-- Always include disabled states where user input is required before action (e.g., Submit disabled until one click is placed, Confirm disabled until photo is selected)
+- Always include disabled states where user input is required before action (e.g., Confirm disabled until photo is selected in Phase 1)
 
 ### Animation guidance
 
